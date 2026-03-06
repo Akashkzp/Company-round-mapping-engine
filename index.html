@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company Round Mapping Engine</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: dark;
+      --bg: #050711;
+      --card: #0e101d;
+      --accent: #ffd166;
+      --accent-soft: rgba(255, 209, 102, 0.14);
+      --text-subtle: #a6acbf;
+      --border: #262b3d;
+      --success: #2ecc71;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1b2841 0, #050711 45%);
+      color: #f5f7ff;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1080px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .shell-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: radial-gradient(circle at top left, rgba(255, 209, 102, 0.16), transparent);
+      gap: 10px;
+    }
+
+    .shell-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fdfcff;
+      line-height: 1.2;
+    }
+
+    .shell-pill {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-subtle);
+      white-space: nowrap;
+    }
+
+    .shell-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+      gap: 24px;
+      padding: 24px;
+    }
+
+    @media (max-width: 880px) {
+      .shell-body { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .panel {
+      background: rgba(4, 6, 20, 0.92);
+      border-radius: 18px;
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .panel-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+
+    .panel-hint {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(6, 8, 26, 0.9);
+      color: #f8f8ff;
+      padding: 8px 10px;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    textarea { min-height: 60px; resize: vertical; }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(255, 209, 102, 0.65);
+      box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.3);
+      background: rgba(10, 12, 34, 0.96);
+    }
+
+    select[multiple] { padding: 6px; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 2.5fr 1.2fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field { margin-bottom: 10px; }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 15px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #1a1200;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.4),
+        0 12px 30px rgba(0, 0, 0, 0.85);
+      margin-top: 6px;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.4),
+        0 6px 18px rgba(0, 0, 0, 0.85);
+    }
+
+    .btn-primary span { font-size: 11px; }
+
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .company-name { font-size: 18px; font-weight: 600; }
+
+    .size-pill {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(255, 209, 102, 0.5);
+      color: #ffe8a9;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .intel-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 880px) {
+      .intel-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .intel-item-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-subtle);
+      margin-bottom: 2px;
+    }
+
+    .intel-item-value { font-size: 13px; }
+
+    .focus-box {
+      margin-top: 10px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      background: radial-gradient(circle at left top, rgba(255, 209, 102, 0.16), transparent);
+      border: 1px solid rgba(255, 209, 102, 0.3);
+      font-size: 13px;
+    }
+
+    .focus-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #ffe8a9;
+      margin-bottom: 3px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 22px;
+      margin-top: 6px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 7px;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(255, 209, 102, 0.2), rgba(255, 209, 102, 0.02));
+    }
+
+    .timeline-item { position: relative; padding-bottom: 14px; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1px;
+      top: 3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow:
+        0 0 0 4px rgba(255, 209, 102, 0.18),
+        0 0 16px rgba(255, 209, 102, 0.5);
+    }
+
+    .timeline-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+
+    .timeline-sub { font-size: 12px; color: var(--text-subtle); margin-bottom: 2px; }
+
+    .timeline-why { font-size: 11px; color: #c3c9dd; font-style: italic; }
+
+    .note {
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .pill-success {
+      font-size: 11px;
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 4px;
+    }
+
+    .history-list {
+      margin-top: 10px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-top: 8px;
+      max-height: 148px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      padding: 4px 0;
+      color: var(--text-subtle);
+    }
+
+    .history-company { font-weight: 500; color: #e8ecff; }
+    .history-meta { opacity: 0.9; }
+
+    .history-empty {
+      font-size: 11px;
+      color: var(--text-subtle);
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: var(--text-subtle);
+      margin-right: 4px;
+      margin-top: 2px;
+    }
+
+    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    .fade { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="shell-header">
+      <div class="shell-title">Placement Readiness · Company Intel + Round Mapping</div>
+      <div class="shell-pill">/results · Demo Mode</div>
+    </div>
+
+    <div class="shell-body">
+      <div class="panel">
+        <div class="panel-title">Input · Company + Skills</div>
+        <div class="panel-hint">
+          Non‑negotiable: routes unchanged · no scraping · existing features intact.
+        </div>
+
+        <form id="intelForm">
+          <div class="field-row">
+            <div class="field">
+              <label for="companyName">Company name</label>
+              <input id="companyName" type="text" placeholder="e.g. Amazon" required />
+            </div>
+            <div class="field">
+              <label for="headcount">Approx. employees (optional)</label>
+              <input id="headcount" type="number" min="1" placeholder="e.g. 1500" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="skills">Primary skills detected</label>
+            <select id="skills" multiple size="4" aria-label="Primary skills detected">
+              <option value="DSA">DSA</option>
+              <option value="Core CS">Core CS</option>
+              <option value="React">React</option>
+              <option value="Node">Node</option>
+              <option value="Full Stack">Full Stack</option>
+              <option value="Java">Java</option>
+              <option value="Python">Python</option>
+            </select>
+            <div class="panel-hint fade">
+              Tip: Hold Ctrl to select multiple skills (Windows).
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="notes">Extra tags / description (optional)</label>
+            <textarea id="notes" placeholder="e.g. Service‑based · product company · fintech · campus hiring"></textarea>
+          </div>
+
+          <button class="btn-primary" type="submit">
+            <span>Generate Company Intel + Rounds</span>
+          </button>
+
+          <div class="panel-hint" style="margin-top:10px;">
+            Output required:
+            <span class="chip"><span class="chip-dot"></span>Company intel renders correctly</span>
+            <span class="chip"><span class="chip-dot"></span>Round mapping changes with company + skills</span>
+            <span class="chip"><span class="chip-dot"></span>History persists</span>
+          </div>
+        </form>
+
+        <div class="history-list" id="history"></div>
+      </div>
+
+      <div class="panel" id="outputPanel" style="display:none;">
+        <div class="panel-title">Company Intel · Heuristic Card</div>
+        <div id="intelContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const KNOWN_ENTERPRISE = [
+      "amazon",
+      "infosys",
+      "tcs",
+      "tata consultancy services",
+      "wipro",
+      "cognizant",
+      "google",
+      "microsoft",
+      "accenture",
+      "ibm",
+      "meta",
+      "oracle"
+    ];
+
+    function inferIndustry(companyName, notes) {
+      const combined = ((companyName || "") + " " + (notes || "")).toLowerCase();
+      if (combined.includes("bank") || combined.includes("fintech") || combined.includes("finance")) return "Financial Services";
+      if (combined.includes("health") || combined.includes("med") || combined.includes("pharma")) return "Healthcare / Life Sciences";
+      if (combined.includes("edtech") || combined.includes("education")) return "EdTech / Education";
+      return "Technology Services";
+    }
+
+    function inferSizeCategory(companyName, headcount) {
+      const name = (companyName || "").toLowerCase();
+      const n = Number(headcount);
+
+      if (!Number.isNaN(n) && n > 0) {
+        if (n < 200) return "Startup";
+        if (n <= 2000) return "Mid‑size";
+        return "Enterprise";
+      }
+
+      if (KNOWN_ENTERPRISE.some((c) => name.includes(c))) return "Enterprise";
+      return "Startup";
+    }
+
+    function computeHiringFocus(sizeCategory) {
+      if (sizeCategory === "Enterprise") {
+        return {
+          title: "Typical Hiring Focus · Enterprise",
+          text: "Structured DSA practice, strong grasp of core CS fundamentals, and performance under timed assessments."
+        };
+      }
+      return {
+        title: "Typical Hiring Focus · Startup",
+        text: "Practical problem solving, ownership of real‑world projects, and depth in the chosen technology stack."
+      };
+    }
+
+    function normalizeSkills(rawSkills, notes) {
+      const skills = new Set((rawSkills || []).map((s) => s.trim()).filter(Boolean));
+      const extra = (notes || "").toLowerCase();
+      if (extra.includes("react")) skills.add("React");
+      if (extra.includes("node")) skills.add("Node");
+      if (extra.includes("dsa")) skills.add("DSA");
+      if (extra.includes("core")) skills.add("Core CS");
+      return Array.from(skills);
+    }
+
+    function hasSkill(skills, keyword) {
+      return skills.some((s) => s.toLowerCase().includes(keyword.toLowerCase()));
+    }
+
+    function generateRoundMapping(sizeCategory, skills) {
+      const rounds = [];
+      const dsaHeavy = hasSkill(skills, "DSA") || hasSkill(skills, "Core CS");
+      const frontendBackend = hasSkill(skills, "React") || hasSkill(skills, "Node") || hasSkill(skills, "Full Stack");
+
+      if (sizeCategory === "Enterprise" && dsaHeavy) {
+        rounds.push({
+          title: "Round 1 · Online Test (DSA + Aptitude)",
+          subtitle: "Timed assessment · platform based",
+          why: "Filters for problem‑solving speed, comfort with data structures, and quantitative aptitude at scale."
+        });
+        rounds.push({
+          title: "Round 2 · Technical Interview (DSA + Core CS)",
+          subtitle: "1:1 / panel",
+          why: "Validates deeper understanding of algorithms, OS, DBMS, OOPs and ability to reason about trade‑offs."
+        });
+        rounds.push({
+          title: "Round 3 · Tech + Projects Discussion",
+          subtitle: "Hands‑on + portfolio",
+          why: "Connects your previous work with their tech stack and checks how you communicate technical decisions."
+        });
+        rounds.push({
+          title: "Round 4 · HR / Culture Fit",
+          subtitle: "Behavioural + offer discussion",
+          why: "Aligns expectations on role, location, compensation, and long‑term fit with company culture."
+        });
+        return rounds;
+      }
+
+      if ((sizeCategory === "Startup" || sizeCategory === "Mid‑size") && frontendBackend) {
+        rounds.push({
+          title: "Round 1 · Practical Coding",
+          subtitle: "Live coding / take‑home",
+          why: "Evaluates how you structure real code, debug, and work with frameworks (React / Node / full‑stack)."
+        });
+        rounds.push({
+          title: "Round 2 · System / Architecture Discussion",
+          subtitle: "Design + trade‑offs",
+          why: "Checks your ability to design components, APIs, and data models that scale with product needs."
+        });
+        rounds.push({
+          title: "Round 3 · Culture Fit & Founder Round",
+          subtitle: "Vision + ownership",
+          why: "Ensures alignment with startup pace, ownership mindset, and learning expectations."
+        });
+        return rounds;
+      }
+
+      rounds.push({
+        title: "Round 1 · Screening / Online Test",
+        subtitle: "Basic coding + aptitude",
+        why: "Quickly verifies minimum bar on programming and problem‑solving before deeper conversations."
+      });
+      rounds.push({
+        title: "Round 2 · Technical Interview",
+        subtitle: "Role‑specific skills",
+        why: "Assesses the exact skills you will use on the job (language, tools, domain knowledge)."
+      });
+      rounds.push({
+        title: "Round 3 · HR / Manager Discussion",
+        subtitle: "Behavioural + offer",
+        why: "Aligns on expectations, communication style, and long‑term compatibility."
+      });
+      return rounds;
+    }
+
+    const intelForm = document.getElementById("intelForm");
+    const intelContainer = document.getElementById("intelContainer");
+    const outputPanel = document.getElementById("outputPanel");
+    const historyContainer = document.getElementById("history");
+
+    function saveToHistory(entry) {
+      const key = "companyIntelHistory";
+      const current = JSON.parse(localStorage.getItem(key) || "[]");
+      current.unshift({ ...entry, ts: new Date().toISOString() });
+      localStorage.setItem(key, JSON.stringify(current.slice(0, 10)));
+    }
+
+    function loadHistory() {
+      const key = "companyIntelHistory";
+      const current = JSON.parse(localStorage.getItem(key) || "[]");
+      historyContainer.innerHTML = "";
+
+      if (current.length === 0) {
+        historyContainer.innerHTML =
+          '<div class="history-empty">History will appear here after you generate intel at least once.</div>';
+        return;
+      }
+
+      current.forEach((e) => {
+        const date = new Date(e.ts);
+        const line = document.createElement("div");
+        line.className = "history-item";
+        line.innerHTML = `
+          <div>
+            <div class="history-company">${e.companyName}</div>
+            <div class="history-meta">${e.sizeCategory} · ${e.industry}</div>
+          </div>
+          <div class="history-meta">
+            ${date.toLocaleDateString()} · ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </div>
+        `;
+        historyContainer.appendChild(line);
+      });
+    }
+
+    function renderIntelView(model) {
+      const skillsBadges = model.skills.length
+        ? model.skills.map((s) => `<span class="badge">${s}</span>`).join("")
+        : '<span class="badge">Not explicitly detected</span>';
+
+      const roundsHtml = model.rounds.map((r) => `
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">${r.title}</div>
+          <div class="timeline-sub">${r.subtitle}</div>
+          <div class="timeline-why">Why this round matters: ${r.why}</div>
+        </div>
+      `).join("");
+
+      intelContainer.innerHTML = `
+        <div class="company-header">
+          <div class="company-name">${model.companyName}</div>
+          <div class="size-pill">${model.sizeCategory}</div>
+        </div>
+
+        <div class="intel-grid">
+          <div>
+            <div class="intel-item-label">Industry</div>
+            <div class="intel-item-value">${model.industry}</div>
+
+            <div style="margin-top:8px;">
+              <div class="intel-item-label">Skills detected</div>
+              <div class="badge-row">${skillsBadges}</div>
+            </div>
+
+            ${model.headcount ? `
+              <div style="margin-top:8px;">
+                <div class="intel-item-label">Approx. size (input)</div>
+                <div class="intel-item-value">${Number(model.headcount).toLocaleString()} employees</div>
+              </div>
+            ` : ""}
+          </div>
+
+          <div>
+            <div class="focus-box">
+              <div class="focus-title">${model.hiringFocus.title}</div>
+              <div>${model.hiringFocus.text}</div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <div class="intel-item-label">Round Mapping Engine</div>
+              <div class="timeline">${roundsHtml}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          <div class="note-dot"></div>
+          <div>
+            Demo Mode: Company intel generated heuristically.
+            <span class="pill-success"><span>●</span> persisted in history</span>
+          </div>
+        </div>
+      `;
+
+      outputPanel.style.display = "block";
+    }
+
+    intelForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const companyName = document.getElementById("companyName").value.trim();
+      const headcountRaw = document.getElementById("headcount").value;
+      const notes = document.getElementById("notes").value;
+      const skillsSelect = document.getElementById("skills");
+
+      const selectedSkills = Array.from(skillsSelect.selectedOptions).map((o) => o.value);
+      const skills = normalizeSkills(selectedSkills, notes);
+
+      const industry = inferIndustry(companyName, notes);
+      const sizeCategory = inferSizeCategory(companyName, headcountRaw);
+      const hiringFocus = computeHiringFocus(sizeCategory);
+      const rounds = generateRoundMapping(sizeCategory, skills);
+
+      const model = {
+        companyName,
+        headcount: headcountRaw ? Number(headcountRaw) : null,
+        skills,
+        industry,
+        sizeCategory,
+        hiringFocus,
+        rounds
+      };
+
+      renderIntelView(model);
+      saveToHistory(model);
+      loadHistory();
+    });
+
+    loadHistory();
+
+    if (!localStorage.getItem("companyIntelHistory")) {
+      document.getElementById("companyName").value = "Amazon";
+      document.getElementById("headcount").value = "100000";
+      Array.from(document.getElementById("skills").options).forEach((o) => {
+        if (["DSA", "Core CS"].includes(o.value)) o.selected = true;
+      });
+    }
+  </script>
+</body>
+</html>
