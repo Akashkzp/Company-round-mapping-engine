@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Company Round Mapping Engine</title>
   <style>
     :root {
@@ -17,7 +16,9 @@
       --success: #2ecc71;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -32,7 +33,7 @@
 
     .shell {
       width: 100%;
-      max-width: 1080px;
+      max-width: 1120px;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent);
       border-radius: 24px;
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -50,7 +51,6 @@
       align-items: center;
       justify-content: space-between;
       background: radial-gradient(circle at top left, rgba(255, 209, 102, 0.16), transparent);
-      gap: 10px;
     }
 
     .shell-title {
@@ -59,7 +59,6 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: #fdfcff;
-      line-height: 1.2;
     }
 
     .shell-pill {
@@ -71,18 +70,19 @@
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--text-subtle);
-      white-space: nowrap;
     }
 
     .shell-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
       gap: 24px;
       padding: 24px;
     }
 
     @media (max-width: 880px) {
-      .shell-body { grid-template-columns: minmax(0, 1fr); }
+      .shell-body {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .panel {
@@ -104,7 +104,13 @@
     .panel-hint {
       font-size: 11px;
       color: var(--text-subtle);
-      margin-bottom: 16px;
+      margin-bottom: 10px;
+    }
+
+    .warning-text {
+      font-size: 11px;
+      color: #ffd166;
+      margin-top: 4px;
     }
 
     label {
@@ -130,7 +136,10 @@
       transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
-    textarea { min-height: 60px; resize: vertical; }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
 
     input:focus,
     select:focus,
@@ -140,16 +149,16 @@
       background: rgba(10, 12, 34, 0.96);
     }
 
-    select[multiple] { padding: 6px; }
-
     .field-row {
       display: grid;
-      grid-template-columns: 2.5fr 1.2fr;
+      grid-template-columns: 1.4fr 1.4fr;
       gap: 10px;
       margin-bottom: 10px;
     }
 
-    .field { margin-bottom: 10px; }
+    .field {
+      margin-bottom: 10px;
+    }
 
     .badge-row {
       display: flex;
@@ -194,7 +203,9 @@
         0 6px 18px rgba(0, 0, 0, 0.85);
     }
 
-    .btn-primary span { font-size: 11px; }
+    .btn-primary span {
+      font-size: 11px;
+    }
 
     .company-header {
       display: flex;
@@ -204,7 +215,10 @@
       gap: 8px;
     }
 
-    .company-name { font-size: 18px; font-weight: 600; }
+    .company-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
 
     .size-pill {
       font-size: 11px;
@@ -224,7 +238,9 @@
     }
 
     @media (max-width: 880px) {
-      .intel-grid { grid-template-columns: minmax(0, 1fr); }
+      .intel-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .intel-item-label {
@@ -235,7 +251,9 @@
       margin-bottom: 2px;
     }
 
-    .intel-item-value { font-size: 13px; }
+    .intel-item-value {
+      font-size: 13px;
+    }
 
     .focus-box {
       margin-top: 10px;
@@ -270,7 +288,10 @@
       background: linear-gradient(to bottom, rgba(255, 209, 102, 0.2), rgba(255, 209, 102, 0.02));
     }
 
-    .timeline-item { position: relative; padding-bottom: 14px; }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 14px;
+    }
 
     .timeline-dot {
       position: absolute;
@@ -285,11 +306,23 @@
         0 0 16px rgba(255, 209, 102, 0.5);
     }
 
-    .timeline-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .timeline-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
 
-    .timeline-sub { font-size: 12px; color: var(--text-subtle); margin-bottom: 2px; }
+    .timeline-sub {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-bottom: 2px;
+    }
 
-    .timeline-why { font-size: 11px; color: #c3c9dd; font-style: italic; }
+    .timeline-why {
+      font-size: 11px;
+      color: #c3c9dd;
+      font-style: italic;
+    }
 
     .note {
       font-size: 11px;
@@ -300,7 +333,12 @@
       gap: 6px;
     }
 
-    .note-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .note-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
 
     .pill-success {
       font-size: 11px;
@@ -328,8 +366,14 @@
       color: var(--text-subtle);
     }
 
-    .history-company { font-weight: 500; color: #e8ecff; }
-    .history-meta { opacity: 0.9; }
+    .history-company {
+      font-weight: 500;
+      color: #e8ecff;
+    }
+
+    .history-meta {
+      opacity: 0.9;
+    }
 
     .history-empty {
       font-size: 11px;
@@ -351,8 +395,45 @@
       margin-top: 2px;
     }
 
-    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-    .fade { opacity: 0.85; }
+    .chip-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .fade {
+      opacity: 0.85;
+    }
+
+    .skill-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 11px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-subtle);
+      margin: 3px 6px 0 0;
+      user-select: none;
+    }
+
+    .skill-chip[data-state="known"] {
+      border-color: rgba(46, 204, 113, 0.8);
+      background: rgba(46, 204, 113, 0.12);
+      color: #e6fff0;
+    }
+
+    .skill-chip-label {
+      font-weight: 500;
+    }
+
+    .skill-chip-state {
+      opacity: 0.85;
+    }
   </style>
 </head>
 <body>
@@ -363,8 +444,9 @@
     </div>
 
     <div class="shell-body">
+      <!-- LEFT: INPUT / CONTROLS -->
       <div class="panel">
-        <div class="panel-title">Input · Company + Skills</div>
+        <div class="panel-title">Input · Company + JD + Skills</div>
         <div class="panel-hint">
           Non‑negotiable: routes unchanged · no scraping · existing features intact.
         </div>
@@ -373,8 +455,15 @@
           <div class="field-row">
             <div class="field">
               <label for="companyName">Company name</label>
-              <input id="companyName" type="text" placeholder="e.g. Amazon" required />
+              <input id="companyName" type="text" placeholder="e.g. Amazon" />
             </div>
+            <div class="field">
+              <label for="roleName">Role (optional)</label>
+              <input id="roleName" type="text" placeholder="e.g. SDE 1 / Frontend" />
+            </div>
+          </div>
+
+          <div class="field-row">
             <div class="field">
               <label for="headcount">Approx. employees (optional)</label>
               <input id="headcount" type="number" min="1" placeholder="e.g. 1500" />
@@ -382,8 +471,18 @@
           </div>
 
           <div class="field">
+            <label for="jdText">Job description (JD) · required</label>
+            <textarea
+              id="jdText"
+              required
+              placeholder="Paste the JD here so the engine can analyze skills, company intel, and round mapping."
+            ></textarea>
+            <div id="jdWarning" class="warning-text" style="display:none;"></div>
+          </div>
+
+          <div class="field">
             <label for="skills">Primary skills detected</label>
-            <select id="skills" multiple size="4" aria-label="Primary skills detected">
+            <select id="skills" multiple size="5">
               <option value="DSA">DSA</option>
               <option value="Core CS">Core CS</option>
               <option value="React">React</option>
@@ -393,38 +492,44 @@
               <option value="Python">Python</option>
             </select>
             <div class="panel-hint fade">
-              Tip: Hold Ctrl to select multiple skills (Windows).
+              Use the same skills your /results page already extracts. This demo lets you multi‑select.
             </div>
           </div>
 
           <div class="field">
             <label for="notes">Extra tags / description (optional)</label>
-            <textarea id="notes" placeholder="e.g. Service‑based · product company · fintech · campus hiring"></textarea>
+            <textarea
+              id="notes"
+              placeholder="e.g. Service‑based · product company · fintech · campus hiring"
+            ></textarea>
           </div>
 
           <button class="btn-primary" type="submit">
-            <span>Generate Company Intel + Rounds</span>
+            <span>Analyze JD · Generate Intel + Rounds</span>
           </button>
 
           <div class="panel-hint" style="margin-top:10px;">
             Output required:
             <span class="chip"><span class="chip-dot"></span>Company intel renders correctly</span>
             <span class="chip"><span class="chip-dot"></span>Round mapping changes with company + skills</span>
-            <span class="chip"><span class="chip-dot"></span>History persists</span>
+            <span class="chip"><span class="chip-dot"></span>History persists with schema</span>
           </div>
         </form>
 
         <div class="history-list" id="history"></div>
       </div>
 
+      <!-- RIGHT: COMPANY INTEL + ROUND MAPPING -->
       <div class="panel" id="outputPanel" style="display:none;">
-        <div class="panel-title">Company Intel · Heuristic Card</div>
+        <div class="panel-title">Company Intel · Round Mapping Layer</div>
         <div id="intelContainer"></div>
       </div>
     </div>
   </div>
 
   <script>
+    /************* HEURISTIC ENGINE *************/
+
     const KNOWN_ENTERPRISE = [
       "amazon",
       "infosys",
@@ -440,11 +545,25 @@
       "oracle"
     ];
 
+    const HISTORY_KEY = "companyIntelHistory_v2";
+
     function inferIndustry(companyName, notes) {
-      const combined = ((companyName || "") + " " + (notes || "")).toLowerCase();
-      if (combined.includes("bank") || combined.includes("fintech") || combined.includes("finance")) return "Financial Services";
-      if (combined.includes("health") || combined.includes("med") || combined.includes("pharma")) return "Healthcare / Life Sciences";
-      if (combined.includes("edtech") || combined.includes("education")) return "EdTech / Education";
+      const name = (companyName || "").toLowerCase();
+      const extra = (notes || "").toLowerCase();
+
+      const combined = name + " " + extra;
+
+      if (combined.includes("bank") || combined.includes("fintech") || combined.includes("finance")) {
+        return "Financial Services";
+      }
+      if (combined.includes("health") || combined.includes("med") || combined.includes("pharma")) {
+        return "Healthcare / Life Sciences";
+      }
+      if (combined.includes("edtech") || combined.includes("education")) {
+        return "EdTech / Education";
+      }
+
+      // Spec: default to Technology Services
       return "Technology Services";
     }
 
@@ -454,11 +573,16 @@
 
       if (!Number.isNaN(n) && n > 0) {
         if (n < 200) return "Startup";
-        if (n <= 2000) return "Mid‑size";
+        if (n <= 2000) return "Mid-size";
         return "Enterprise";
       }
 
-      if (KNOWN_ENTERPRISE.some((c) => name.includes(c))) return "Enterprise";
+      // Headcount missing → use heuristic based on known list
+      if (KNOWN_ENTERPRISE.some((c) => name.includes(c))) {
+        return "Enterprise";
+      }
+
+      // Default per spec
       return "Startup";
     }
 
@@ -469,6 +593,8 @@
           text: "Structured DSA practice, strong grasp of core CS fundamentals, and performance under timed assessments."
         };
       }
+
+      // Startup or Mid-size → treat as Startup for template text
       return {
         title: "Typical Hiring Focus · Startup",
         text: "Practical problem solving, ownership of real‑world projects, and depth in the chosen technology stack."
@@ -476,13 +602,23 @@
     }
 
     function normalizeSkills(rawSkills, notes) {
-      const skills = new Set((rawSkills || []).map((s) => s.trim()).filter(Boolean));
+      const skills = new Set(
+        (rawSkills || []).map((s) => s.trim()).filter(Boolean)
+      );
       const extra = (notes || "").toLowerCase();
+
       if (extra.includes("react")) skills.add("React");
       if (extra.includes("node")) skills.add("Node");
       if (extra.includes("dsa")) skills.add("DSA");
       if (extra.includes("core")) skills.add("Core CS");
+
       return Array.from(skills);
+    }
+
+    function ensureDefaultSkillsIfEmpty(skills) {
+      if (skills.length > 0) return skills;
+      // Spec: fallback when extraction returns empty
+      return ["Communication", "Problem solving", "Basic coding", "Projects"];
     }
 
     function hasSkill(skills, keyword) {
@@ -491,8 +627,10 @@
 
     function generateRoundMapping(sizeCategory, skills) {
       const rounds = [];
+
       const dsaHeavy = hasSkill(skills, "DSA") || hasSkill(skills, "Core CS");
-      const frontendBackend = hasSkill(skills, "React") || hasSkill(skills, "Node") || hasSkill(skills, "Full Stack");
+      const frontendBackend =
+        hasSkill(skills, "React") || hasSkill(skills, "Node") || hasSkill(skills, "Full Stack");
 
       if (sizeCategory === "Enterprise" && dsaHeavy) {
         rounds.push({
@@ -518,7 +656,7 @@
         return rounds;
       }
 
-      if ((sizeCategory === "Startup" || sizeCategory === "Mid‑size") && frontendBackend) {
+      if ((sizeCategory === "Startup" || sizeCategory === "Mid-size") && frontendBackend) {
         rounds.push({
           title: "Round 1 · Practical Coding",
           subtitle: "Live coding / take‑home",
@@ -537,6 +675,7 @@
         return rounds;
       }
 
+      // Fallback generic mapping
       rounds.push({
         title: "Round 1 · Screening / Online Test",
         subtitle: "Basic coding + aptitude",
@@ -555,37 +694,267 @@
       return rounds;
     }
 
+    function groupSkills(skills) {
+      const buckets = {
+        coreCS: [],
+        languages: [],
+        web: [],
+        data: [],
+        cloud: [],
+        testing: [],
+        other: []
+      };
+
+      skills.forEach((s) => {
+        if (s === "DSA" || s === "Core CS") buckets.coreCS.push(s);
+        else if (s === "Java" || s === "Python") buckets.languages.push(s);
+        else if (s === "React" || s === "Node" || s === "Full Stack") buckets.web.push(s);
+        else buckets.other.push(s);
+      });
+
+      return buckets;
+    }
+
+    function computeBaseScore(jdText, skillCount) {
+      const len = jdText.length;
+      let score = 40 + Math.floor(len / 25) + skillCount * 4;
+      if (len < 200) score -= 10; // short JD penalty
+      score = Math.max(10, Math.min(90, score));
+      return score;
+    }
+
+    function buildChecklist(sizeCategory, skills) {
+      const itemsCore = [
+        "Review data structures and algorithms from recent interviews",
+        "Revise OS, DBMS, and networking basics"
+      ];
+      const itemsPractical = [
+        "Ship a small feature using the target stack",
+        "Prepare 2–3 projects to demo end‑to‑end"
+      ];
+
+      const rounds = [];
+
+      if (sizeCategory === "Enterprise") {
+        rounds.push({ roundTitle: "Online Test", items: ["Solve 5–7 practice DSA sets under time", "Do mock aptitude tests"] });
+        rounds.push({ roundTitle: "Technical", items: itemsCore });
+        rounds.push({ roundTitle: "Projects / Tech", items: itemsPractical });
+      } else {
+        rounds.push({ roundTitle: "Practical Coding", items: itemsPractical });
+        rounds.push({
+          roundTitle: "System Discussion",
+          items: ["Sketch a simple system design daily", "Practice explaining trade‑offs out loud"]
+        });
+      }
+
+      if (!skills.length) {
+        rounds.push({
+          roundTitle: "Soft Skills",
+          items: ["Practice communicating thought‑process clearly", "Prepare stories around teamwork and ownership"]
+        });
+      }
+
+      return rounds;
+    }
+
+    function buildPlan7Days(sizeCategory) {
+      const base = [
+        { day: "Day 1", focus: "JD deep dive", tasks: ["Highlight key responsibilities", "Map them to your skills"] },
+        { day: "Day 2", focus: "Core concepts", tasks: ["Revise fundamentals relevant to the role"] },
+        { day: "Day 3", focus: "DSA / coding", tasks: ["Solve timed problems or build a small feature"] },
+        { day: "Day 4", focus: "Projects", tasks: ["Refine portfolio and README for top projects"] },
+        { day: "Day 5", focus: "Mock interviews", tasks: ["Run at least one mock interview"] },
+        { day: "Day 6", focus: "Systems + HR prep", tasks: ["Prepare design patterns & behavioural answers"] },
+        { day: "Day 7", focus: "Light revision", tasks: ["Quick review and rest before interviews"] }
+      ];
+
+      if (sizeCategory === "Enterprise") return base;
+      return base.map((d) =>
+        d.day === "Day 3"
+          ? {
+              ...d,
+              focus: "End‑to‑end coding",
+              tasks: ["Build or extend a mini‑project using stack from the JD"]
+            }
+          : d
+      );
+    }
+
+    function buildQuestions(sizeCategory) {
+      const common = [
+        "What does success look like in the first 6 months for this role?",
+        "How does the team support learning and upskilling?"
+      ];
+
+      if (sizeCategory === "Enterprise") {
+        return [
+          "How are candidates evaluated across online test vs interviews?",
+          "Which teams could I be mapped to after selection?",
+          ...common
+        ];
+      }
+
+      return [
+        "What kind of ownership will I have on features or modules?",
+        "How does the engineering team collaborate with product and design?",
+        ...common
+      ];
+    }
+
+    /************* HISTORY HELPERS (schema + robustness) *************/
+
+    function safeLoadHistory() {
+      const result = { entries: [], hadCorruption: false };
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return result;
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          result.entries = parsed;
+        } else {
+          result.hadCorruption = true;
+        }
+      } catch {
+        result.hadCorruption = true;
+      }
+      return result;
+    }
+
+    function saveHistoryEntries(entries) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
+    }
+
+    function saveToHistory(entry) {
+      const { entries } = safeLoadHistory();
+      entries.unshift(entry);
+      const trimmed = entries.slice(0, 10);
+      saveHistoryEntries(trimmed);
+    }
+
+    /************* MAIN MODEL BUILDER *************/
+
+    function buildAnalysisEntry(input) {
+      const {
+        companyName,
+        roleName,
+        jdText,
+        headcountRaw,
+        skills,
+        notes
+      } = input;
+
+      const now = new Date().toISOString();
+      const industry = inferIndustry(companyName, notes);
+      const sizeCategory = inferSizeCategory(companyName, headcountRaw);
+      const hiringFocus = computeHiringFocus(sizeCategory);
+      const rounds = generateRoundMapping(sizeCategory, skills);
+
+      const grouped = groupSkills(skills);
+      const baseScore = computeBaseScore(jdText, skills.length);
+
+      const skillConfidenceMap = {};
+      skills.forEach((s) => {
+        skillConfidenceMap[s] = "practice";
+      });
+
+      const finalScore = baseScore; // baseScore on analyze; finalScore moves only via skillConfidenceMap
+
+      const roundMappingSchema = rounds.map((r) => ({
+        roundTitle: r.title,
+        focusAreas: [],
+        whyItMatters: r.why
+      }));
+
+      const checklist = buildChecklist(sizeCategory, skills);
+      const plan7Days = buildPlan7Days(sizeCategory);
+      const questions = buildQuestions(sizeCategory);
+
+      return {
+        // standardised history entry schema
+        id: `${now}::${companyName || "Unknown"}`,
+        createdAt: now,
+        company: companyName || "",
+        role: roleName || "",
+        jdText,
+        extractedSkills: {
+          coreCS: grouped.coreCS,
+          languages: grouped.languages,
+          web: grouped.web,
+          data: grouped.data,
+          cloud: grouped.cloud,
+          testing: grouped.testing,
+          other: grouped.other
+        },
+        roundMapping: roundMappingSchema,
+        checklist,
+        plan7Days,
+        questions,
+        baseScore,
+        skillConfidenceMap,
+        finalScore,
+        updatedAt: now,
+        // fields used directly by the intel UI
+        companyName,
+        headcount: headcountRaw ? Number(headcountRaw) : null,
+        skills,
+        industry,
+        sizeCategory,
+        hiringFocus,
+        rounds
+      };
+    }
+
+    function recomputeFinalScoreFromConfidence(entry) {
+      let knownCount = 0;
+      Object.values(entry.skillConfidenceMap || {}).forEach((state) => {
+        if (state === "known") knownCount += 1;
+      });
+      let finalScore = entry.baseScore + knownCount * 3;
+      finalScore = Math.min(100, Math.max(0, finalScore));
+      entry.finalScore = finalScore;
+      entry.updatedAt = new Date().toISOString();
+    }
+
+    /************* RENDERING *************/
+
     const intelForm = document.getElementById("intelForm");
     const intelContainer = document.getElementById("intelContainer");
     const outputPanel = document.getElementById("outputPanel");
     const historyContainer = document.getElementById("history");
+    const jdWarningEl = document.getElementById("jdWarning");
 
-    function saveToHistory(entry) {
-      const key = "companyIntelHistory";
-      const current = JSON.parse(localStorage.getItem(key) || "[]");
-      current.unshift({ ...entry, ts: new Date().toISOString() });
-      localStorage.setItem(key, JSON.stringify(current.slice(0, 10)));
-    }
+    let lastRenderedEntryId = null;
 
-    function loadHistory() {
-      const key = "companyIntelHistory";
-      const current = JSON.parse(localStorage.getItem(key) || "[]");
+    function renderHistory() {
+      const { entries, hadCorruption } = safeLoadHistory();
       historyContainer.innerHTML = "";
 
-      if (current.length === 0) {
-        historyContainer.innerHTML =
-          '<div class="history-empty">History will appear here after you generate intel at least once.</div>';
+      if (hadCorruption) {
+        const warn = document.createElement("div");
+        warn.className = "warning-text";
+        warn.textContent =
+          "One saved entry couldn't be loaded. Create a new analysis.";
+        historyContainer.appendChild(warn);
+      }
+
+      if (!entries.length) {
+        const empty = document.createElement("div");
+        empty.className = "history-empty";
+        empty.textContent =
+          "History will appear here after you generate intel at least once.";
+        historyContainer.appendChild(empty);
         return;
       }
 
-      current.forEach((e) => {
-        const date = new Date(e.ts);
+      entries.forEach((e) => {
+        if (!e || typeof e !== "object" || !("company" in e)) return; // skip malformed
+        const date = new Date(e.createdAt || e.updatedAt || Date.now());
         const line = document.createElement("div");
         line.className = "history-item";
         line.innerHTML = `
           <div>
-            <div class="history-company">${e.companyName}</div>
-            <div class="history-meta">${e.sizeCategory} · ${e.industry}</div>
+            <div class="history-company">${e.company || "Unknown"}</div>
+            <div class="history-meta">${e.sizeCategory || "N/A"} · ${e.industry || "Technology Services"}</div>
           </div>
           <div class="history-meta">
             ${date.toLocaleDateString()} · ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -595,53 +964,121 @@
       });
     }
 
-    function renderIntelView(model) {
-      const skillsBadges = model.skills.length
-        ? model.skills.map((s) => `<span class="badge">${s}</span>`).join("")
-        : '<span class="badge">Not explicitly detected</span>';
+    function renderIntelView(entry) {
+      const skillsBadges = entry.skills.length
+        ? entry.skills.map((s) => `<span class="badge">${s}</span>`).join("")
+        : '<span class="badge">Using default soft skills</span>';
 
-      const roundsHtml = model.rounds.map((r) => `
+      const roundsHtml = entry.rounds
+        .map(
+          (r) => `
         <div class="timeline-item">
           <div class="timeline-dot"></div>
           <div class="timeline-title">${r.title}</div>
           <div class="timeline-sub">${r.subtitle}</div>
           <div class="timeline-why">Why this round matters: ${r.why}</div>
+        </div>`
+        )
+        .join("");
+
+      const checklistHtml = entry.checklist
+        .map(
+          (r) => `
+          <div class="intel-item-value" style="margin-top:4px;">
+            <strong>${r.roundTitle}:</strong> ${r.items.join(" · ")}
+          </div>`
+        )
+        .join("");
+
+      const planHtml = entry.plan7Days
+        .map(
+          (d) => `
+          <div class="intel-item-value" style="margin-top:2px;">
+            <strong>${d.day}:</strong> ${d.focus} — ${d.tasks[0]}
+          </div>`
+        )
+        .join("");
+
+      const questionsHtml = entry.questions
+        .map((q) => `<div class="intel-item-value">• ${q}</div>`)
+        .join("");
+
+      const scoreBlock = `
+        <div style="margin-top:10px;">
+          <div class="intel-item-label">Score stability</div>
+          <div class="intel-item-value">
+            Base score: <span id="baseScore">${entry.baseScore}</span> ·
+            Final score: <span id="finalScore">${entry.finalScore}</span>
+          </div>
+          <div class="panel-hint fade" style="margin-top:4px;">
+            Base score is computed only when you analyze a JD. Final score changes only based on your skill confidence.
+          </div>
+          <div id="skillConfidence" class="badge-row"></div>
         </div>
-      `).join("");
+      `;
 
       intelContainer.innerHTML = `
         <div class="company-header">
-          <div class="company-name">${model.companyName}</div>
-          <div class="size-pill">${model.sizeCategory}</div>
+          <div>
+            <div class="company-name">${entry.companyName || "Unknown company"}</div>
+            ${
+              entry.role
+                ? `<div class="intel-item-value" style="margin-top:2px;">Role: ${entry.role}</div>`
+                : ""
+            }
+          </div>
+          <div class="size-pill">${entry.sizeCategory}</div>
         </div>
 
         <div class="intel-grid">
           <div>
             <div class="intel-item-label">Industry</div>
-            <div class="intel-item-value">${model.industry}</div>
+            <div class="intel-item-value">${entry.industry}</div>
 
             <div style="margin-top:8px;">
               <div class="intel-item-label">Skills detected</div>
               <div class="badge-row">${skillsBadges}</div>
             </div>
 
-            ${model.headcount ? `
-              <div style="margin-top:8px;">
-                <div class="intel-item-label">Approx. size (input)</div>
-                <div class="intel-item-value">${Number(model.headcount).toLocaleString()} employees</div>
-              </div>
-            ` : ""}
+            ${
+              entry.headcount
+                ? `
+            <div style="margin-top:8px;">
+              <div class="intel-item-label">Approx. size (input)</div>
+              <div class="intel-item-value">${entry.headcount.toLocaleString()} employees</div>
+            </div>`
+                : ""
+            }
+
+            ${scoreBlock}
           </div>
 
           <div>
             <div class="focus-box">
-              <div class="focus-title">${model.hiringFocus.title}</div>
-              <div>${model.hiringFocus.text}</div>
+              <div class="focus-title">${entry.hiringFocus.title}</div>
+              <div>${entry.hiringFocus.text}</div>
             </div>
 
             <div style="margin-top:10px;">
               <div class="intel-item-label">Round Mapping Engine</div>
-              <div class="timeline">${roundsHtml}</div>
+              <div class="timeline">
+                ${roundsHtml}
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <div class="intel-item-label">Checklist (per round)</div>
+              ${checklistHtml}
+            </div>
+
+            <div style="margin-top:10px;">
+              <div class="intel-item-label">7‑day preparation snapshot</div>
+              ${planHtml}
+            </div>
+
+            <div style="margin-top:10px;">
+              <div class="intel-item-label">Good questions to ask</div>
+              ${questionsHtml}
             </div>
           </div>
         </div>
@@ -650,54 +1087,103 @@
           <div class="note-dot"></div>
           <div>
             Demo Mode: Company intel generated heuristically.
-            <span class="pill-success"><span>●</span> persisted in history</span>
+            <span class="pill-success">
+              <span>●</span> persisted in history
+            </span>
           </div>
         </div>
       `;
 
+      const skillContainer = document.getElementById("skillConfidence");
+      skillContainer.innerHTML = "";
+      entry.skills.forEach((s) => {
+        const state = entry.skillConfidenceMap[s] || "practice";
+        const chip = document.createElement("div");
+        chip.className = "skill-chip";
+        chip.dataset.skill = s;
+        chip.dataset.state = state;
+        chip.innerHTML = `
+          <span class="skill-chip-label">${s}</span>
+          <span class="skill-chip-state">${state === "known" ? "Known" : "Practice"}</span>
+        `;
+        skillContainer.appendChild(chip);
+      });
+
       outputPanel.style.display = "block";
+      lastRenderedEntryId = entry.id;
     }
+
+    /************* EVENTS *************/
 
     intelForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
       const companyName = document.getElementById("companyName").value.trim();
+      const roleName = document.getElementById("roleName").value.trim();
       const headcountRaw = document.getElementById("headcount").value;
+      const jdTextRaw = document.getElementById("jdText").value;
+      const jdText = jdTextRaw.trim();
       const notes = document.getElementById("notes").value;
       const skillsSelect = document.getElementById("skills");
 
+      if (!jdText) {
+        jdWarningEl.style.display = "block";
+        jdWarningEl.textContent = "Please paste a job description to analyze.";
+        document.getElementById("jdText").focus();
+        return;
+      }
+
+      if (jdText.length < 200) {
+        jdWarningEl.style.display = "block";
+        jdWarningEl.textContent =
+          "This JD is too short to analyze deeply. Paste full JD for better output.";
+      } else {
+        jdWarningEl.style.display = "none";
+      }
+
       const selectedSkills = Array.from(skillsSelect.selectedOptions).map((o) => o.value);
-      const skills = normalizeSkills(selectedSkills, notes);
+      let skills = normalizeSkills(selectedSkills, notes);
+      skills = ensureDefaultSkillsIfEmpty(skills);
 
-      const industry = inferIndustry(companyName, notes);
-      const sizeCategory = inferSizeCategory(companyName, headcountRaw);
-      const hiringFocus = computeHiringFocus(sizeCategory);
-      const rounds = generateRoundMapping(sizeCategory, skills);
-
-      const model = {
+      const entry = buildAnalysisEntry({
         companyName,
-        headcount: headcountRaw ? Number(headcountRaw) : null,
+        roleName,
+        jdText,
+        headcountRaw,
         skills,
-        industry,
-        sizeCategory,
-        hiringFocus,
-        rounds
-      };
+        notes
+      });
 
-      renderIntelView(model);
-      saveToHistory(model);
-      loadHistory();
+      renderIntelView(entry);
+      saveToHistory(entry);
+      renderHistory();
     });
 
-    loadHistory();
+    intelContainer.addEventListener("click", (e) => {
+      const chip = e.target.closest(".skill-chip");
+      if (!chip) return;
 
-    if (!localStorage.getItem("companyIntelHistory")) {
-      document.getElementById("companyName").value = "Amazon";
-      document.getElementById("headcount").value = "100000";
-      Array.from(document.getElementById("skills").options).forEach((o) => {
-        if (["DSA", "Core CS"].includes(o.value)) o.selected = true;
-      });
-    }
+      const skill = chip.dataset.skill;
+      const { entries } = safeLoadHistory();
+      const entry = entries.find((x) => x.id === lastRenderedEntryId);
+      if (!entry || !entry.skillConfidenceMap) return;
+
+      const current = entry.skillConfidenceMap[skill] || "practice";
+      const next = current === "known" ? "practice" : "known";
+      entry.skillConfidenceMap[skill] = next;
+      recomputeFinalScoreFromConfidence(entry);
+      saveHistoryEntries(entries);
+
+      // update UI
+      chip.dataset.state = next;
+      chip.querySelector(".skill-chip-state").textContent =
+        next === "known" ? "Known" : "Practice";
+      const finalScoreEl = document.getElementById("finalScore");
+      if (finalScoreEl) finalScoreEl.textContent = String(entry.finalScore);
+    });
+
+    // Initial load
+    renderHistory();
   </script>
 </body>
 </html>
