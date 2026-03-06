@@ -434,6 +434,86 @@
     .skill-chip-state {
       opacity: 0.85;
     }
+
+    /* Test checklist styles */
+    .checklist-panel {
+      margin: 0 24px 18px;
+    }
+
+    .checklist-list {
+      margin-top: 8px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      margin: 3px 0;
+      color: var(--text-subtle);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      margin-top: 2px;
+    }
+
+    .checklist-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    .checklist-warning {
+      font-size: 11px;
+      color: #ffd166;
+      margin-top: 4px;
+    }
+
+    .checklist-footer {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(6, 8, 26, 0.9);
+      color: var(--text-subtle);
+      padding: 6px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-ship {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      color: #021308;
+    }
+
+    .btn-ship[disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-subtle);
+    }
   </style>
 </head>
 <body>
@@ -525,6 +605,31 @@
         <div id="intelContainer"></div>
       </div>
     </div>
+
+    <!-- Built‑in Test Checklist (simulates /prp/07-test) -->
+    <div class="panel checklist-panel">
+      <div class="panel-title">Placement Readiness · Test Checklist (07‑test)</div>
+      <div class="panel-hint">
+        Lock shipping until all core behaviours pass. These checks are stored in localStorage.
+      </div>
+
+      <div id="testChecklist" class="checklist-list"></div>
+
+      <div class="checklist-summary-row">
+        <div id="testsSummary" class="intel-item-value">Tests Passed: 0 / 10</div>
+        <button id="shipButton" class="btn-ship" disabled>Ship route /prp/08‑ship</button>
+      </div>
+      <div id="testsWarning" class="checklist-warning">
+        Fix issues before shipping.
+      </div>
+
+      <div class="checklist-footer">
+        <button id="resetChecklist" class="btn-secondary">Reset checklist</button>
+        <div class="panel-hint fade">
+          Ship lock: /prp/08‑ship stays locked until all 10 items are checked.
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -546,6 +651,7 @@
     ];
 
     const HISTORY_KEY = "companyIntelHistory_v2";
+    const CHECKLIST_KEY = "prpTestChecklist_v1";
 
     function inferIndustry(companyName, notes) {
       const name = (companyName || "").toLowerCase();
@@ -915,6 +1021,108 @@
       entry.updatedAt = new Date().toISOString();
     }
 
+    /************* TEST CHECKLIST (07‑test) *************/
+
+    const TEST_ITEMS = [
+      "JD required validation works",
+      "Short JD warning shows for <200 chars",
+      "Skills extraction groups correctly",
+      "Round mapping changes based on company + skills",
+      "Score calculation is deterministic",
+      "Skill toggles update score live",
+      "Changes persist after refresh",
+      "History saves and loads correctly",
+      "Export buttons copy the correct content",
+      "No console errors on core pages"
+    ];
+
+    function loadChecklistState() {
+      try {
+        const raw = localStorage.getItem(CHECKLIST_KEY);
+        if (!raw) return Array(TEST_ITEMS.length).fill(false);
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return Array(TEST_ITEMS.length).fill(false);
+        const result = Array(TEST_ITEMS.length).fill(false);
+        for (let i = 0; i < TEST_ITEMS.length; i++) {
+          result[i] = Boolean(parsed[i]);
+        }
+        return result;
+      } catch {
+        return Array(TEST_ITEMS.length).fill(false);
+      }
+    }
+
+    function saveChecklistState(state) {
+      try {
+        localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
+      } catch {
+        // ignore write errors
+      }
+    }
+
+    function updateChecklistSummary(state) {
+      const passed = state.filter(Boolean).length;
+      const summaryEl = document.getElementById("testsSummary");
+      const warningEl = document.getElementById("testsWarning");
+      const shipBtn = document.getElementById("shipButton");
+
+      if (summaryEl) {
+        summaryEl.textContent = `Tests Passed: ${passed} / ${TEST_ITEMS.length}`;
+      }
+
+      const allPassed = passed === TEST_ITEMS.length;
+      if (warningEl) {
+        warningEl.style.display = allPassed ? "none" : "block";
+      }
+
+      if (shipBtn) {
+        shipBtn.disabled = !allPassed;
+      }
+    }
+
+    function initChecklist() {
+      const container = document.getElementById("testChecklist");
+      if (!container) return;
+
+      let state = loadChecklistState();
+      container.innerHTML = "";
+
+      TEST_ITEMS.forEach((label, index) => {
+        const row = document.createElement("div");
+        row.className = "checklist-item";
+        row.innerHTML = `
+          <input type="checkbox" id="test-${index}" ${state[index] ? "checked" : ""} />
+          <label for="test-${index}">${label}</label>
+        `;
+        const checkbox = row.querySelector("input");
+        checkbox.addEventListener("change", () => {
+          state[index] = checkbox.checked;
+          saveChecklistState(state);
+          updateChecklistSummary(state);
+        });
+        container.appendChild(row);
+      });
+
+      const resetBtn = document.getElementById("resetChecklist");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          state = Array(TEST_ITEMS.length).fill(false);
+          saveChecklistState(state);
+          initChecklist(); // re-render
+        });
+      }
+
+      const shipBtn = document.getElementById("shipButton");
+      if (shipBtn) {
+        shipBtn.addEventListener("click", () => {
+          if (shipBtn.disabled) return;
+          alert("All tests passed. /prp/08‑ship would now be unlocked in the real app.");
+        });
+      }
+
+      updateChecklistSummary(state);
+    }
+
     /************* RENDERING *************/
 
     const intelForm = document.getElementById("intelForm");
@@ -1184,6 +1392,7 @@
 
     // Initial load
     renderHistory();
+    initChecklist();
   </script>
 </body>
 </html>
